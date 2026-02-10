@@ -7,15 +7,9 @@ app.use(express.json());
 const PORT = 3000;
 require("dotenv").config();
 const GEMINI_KEY = process.env.GEMINI_KEY;
-
-
-
-// Your Chitkara Email
 const EMAIL = "syona1062.be23@chitkara.edu.in";
 
-/* ---------------- HELPER FUNCTIONS ---------------- */
 
-// Fibonacci
 function fibonacci(n) {
   let result = [];
   let a = 0, b = 1;
@@ -28,7 +22,7 @@ function fibonacci(n) {
   return result;
 }
 
-// Prime Check
+
 function isPrime(num) {
   if (num < 2) return false;
 
@@ -39,19 +33,17 @@ function isPrime(num) {
   return true;
 }
 
-// GCD (HCF)
+
 function gcd(a, b) {
   return b === 0 ? a : gcd(b, a % b);
 }
 
-// LCM
+
 function lcm(a, b) {
   return (a * b) / gcd(a, b);
 }
 
-/* ---------------- ROUTES ---------------- */
 
-// Health Check
 app.get("/health", (req, res) => {
   res.status(200).json({
     is_success: true,
@@ -59,14 +51,14 @@ app.get("/health", (req, res) => {
   });
 });
 
-// BFHL API
+
 app.post("/bfhl", async (req, res) => {
   try {
 
     const body = req.body;
     const keys = Object.keys(body);
 
-    // Validate single key
+  
     if (keys.length !== 1) {
       return res.status(400).json({
         is_success: false,
@@ -80,7 +72,7 @@ app.post("/bfhl", async (req, res) => {
 
     let data;
 
-    /* ---------- Fibonacci ---------- */
+  
     if (key === "fibonacci") {
 
       if (!Number.isInteger(value) || value < 0) {
@@ -90,7 +82,7 @@ app.post("/bfhl", async (req, res) => {
       data = fibonacci(value);
     }
 
-    /* ---------- Prime ---------- */
+
     else if (key === "prime") {
 
       if (!Array.isArray(value)) {
@@ -100,7 +92,7 @@ app.post("/bfhl", async (req, res) => {
       data = value.filter(isPrime);
     }
 
-    /* ---------- HCF ---------- */
+   
     else if (key === "hcf") {
 
       if (!Array.isArray(value)) {
@@ -110,7 +102,6 @@ app.post("/bfhl", async (req, res) => {
       data = value.reduce((a, b) => gcd(a, b));
     }
 
-    /* ---------- LCM ---------- */
     else if (key === "lcm") {
 
       if (!Array.isArray(value)) {
@@ -120,8 +111,7 @@ app.post("/bfhl", async (req, res) => {
       data = value.reduce((a, b) => lcm(a, b));
     }
 
-    /* ---------- AI (Gemini) ---------- */
-// ---------- AI (Gemini 2.5 Flash) ----------
+    
 else if (key === "AI") {
 
   if (!GEMINI_KEY) {
@@ -154,7 +144,6 @@ else if (key === "AI") {
 
  
 
-    /* ---------- Invalid Key ---------- */
     else {
       return res.status(400).json({
         is_success: false,
@@ -163,7 +152,6 @@ else if (key === "AI") {
       });
     }
 
-    /* ---------- Success ---------- */
     res.status(200).json({
       is_success: true,
       official_email: EMAIL,
